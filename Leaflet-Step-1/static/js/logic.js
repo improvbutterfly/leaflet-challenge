@@ -24,14 +24,35 @@ function onEachFeature(feature, layer) {
     "</h3><hr><p>" + new Date(feature.properties.time) + "</p>");
 }
 
+// Define a markerSize function that will give each city a different radius based on its population
+function markerOptions(feature, latlng) {
+  var magnitude = feature.properties.mag;
+  var markerSize = magnitude * 5;
+  var geojsonMarkerOptions = {fillOpacity: 0.75,
+    color: "white",
+    fillColor: "purple",
+    radius: markerSize }
+  return L.circleMarker(latlng, geojsonMarkerOptions);
+}
+
+/*circle(feature.geometery.coordinates, {
+    fillOpacity: 0.75,
+    color: "white",
+    fillColor: "purple",
+    // Setting our circle's radius equal to the output of our markerSize function
+    // This will make our marker's size proportionate to its population
+    radius: markerSize(feature.properties.mag)
+  }).
+*/
 // Store our API endpoint inside queryUrl
 var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 
 // Perform a GET request to the query URL
 d3.json(queryUrl, function(data) {
   // Once we get a response, send the data.features object to the createFeatures function
-  //console.log(data.features);
+  console.log(data.features);
   earthquakes = L.geoJson(data.features, {
+    pointToLayer: markerOptions,
     onEachFeature: onEachFeature
   }).addTo(myMap);
 
