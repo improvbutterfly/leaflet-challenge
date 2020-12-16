@@ -79,14 +79,23 @@ function markerOptions(feature, latlng) {
   return L.circleMarker(latlng, geojsonMarkerOptions);
 }
 
+// Source of tectonic plate GeoJSON
+// https://github.com/fraxen/tectonicplates
+var tectonicGeojson = "static/data/tectonic_boundaries.json";
+
+// Create overlay for textonic plates
+var tectonicPlates;
+
+d3.json(tectonicGeojson, function(data) {
+  tectonicPlates = L.geoJson(data).addTo(myMap);
+});
+
 // Store our API endpoint inside queryUrl
 var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 
 // Perform a GET request to the query URL
 d3.json(queryUrl, function(data) {
   // Once we get a response, send the data.features object to the createFeatures function
-  console.log(data.features);
-  console.log(data.features[0].geometry);
   earthquakes = L.geoJson(data.features, {
     pointToLayer: markerOptions,
     onEachFeature: onEachFeature
@@ -95,7 +104,8 @@ d3.json(queryUrl, function(data) {
 
   // Create overlay object to hold our overlay layer
   var overlayMaps = {
-    Earthquakes: earthquakes
+    Earthquakes: earthquakes,
+    "Tectonic Plates": tectonicPlates
   };
 
   // Create a layer control
@@ -126,7 +136,6 @@ d3.json(queryUrl, function(data) {
     });
 
     div.innerHTML += "<ul>" + labels.join("") + "</ul>";
-    console.log(div);
     return div;
   };
 
@@ -135,3 +144,4 @@ d3.json(queryUrl, function(data) {
 
 
 });
+
