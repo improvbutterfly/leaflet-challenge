@@ -19,9 +19,15 @@ var baseMaps = {
   "Street Map": streetmap
 };
 
+// Define colors for scale
+//var colors = ["#8AF475", "#92CC62", "#9AA350", "#A37B3D", "#AB522B", "#B32A18"];
+var colors = ["#95FB80", "#A4D36C", "#B3AB58", "#C38243", "#D25A2F", "#E1321B"];
+
 function onEachFeature(feature, layer) {
   layer.bindPopup("<h3>" + feature.properties.place +
-    "</h3><hr><p>" + new Date(feature.properties.time) + "</p>");
+    "</h3><p>Magnitude: " + feature.properties.mag +
+    " | Depth: " + feature.geometry.coordinates[2] +
+    "km</p>\n<hr>\n<p>" + new Date(feature.properties.time) + "</p>");
 }
 
 // Define a markerSize function that will give each city a different radius based on its population
@@ -33,22 +39,22 @@ function markerOptions(feature, latlng) {
   // Fill color depending on depth
   var fillColor;
   if (depth < 10){
-    fillColor = "#8AF475";
+    fillColor = colors[0];
   }
   else if (depth < 30) {
-    fillColor = "#92CC62";
+    fillColor = colors[1];
   }
   else if (depth < 50) {
-    fillColor = "#9AA350";
+    fillColor = colors[2];
   }
   else if (depth < 70) {
-    fillColor = "#A37B3D";
+    fillColor = colors[3];
   }
   else if (depth < 90) {
-    fillColor = "#AB522B";
+    fillColor = colors[4];
   }
   else {
-    fillColor = "#B32A18";
+    fillColor = colors[5];
   }
 
   var markerSize = magnitude * 5;
@@ -93,7 +99,6 @@ d3.json(queryUrl, function(data) {
   legend.onAdd = function() {
     var div = L.DomUtil.create("div", "legend");
     var limits = ["<10", "10-30", "30-50", "50-70", "70-90", "90+"];
-    var colors = ["#8AF475", "#92CC62", "#9AA350", "#A37B3D", "#AB522B", "#B32A18"];
     var labels = [];
 
     // Add min & max
