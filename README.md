@@ -14,3 +14,13 @@ From the selected dataset and map, I was required to plot the size of the marker
 ![World Map](images/WorldMap.png)
 
 ![Tool Tip sample](images/SampleToolTip.png)
+
+## Leaflet Step 2
+
+Step 2 required me to add an additional data layer for tectonic plates ([source](https://github.com/fraxen/tectonicplates)) and base map layers.
+
+[See it in action!](https://improvbutterfly.github.io/leaflet-challenge/Leaflet-Step-2/)
+
+### Example screenshot
+
+![Satellite Map](images/satellite.png)
