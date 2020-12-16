@@ -1,7 +1,7 @@
 // Creating map object
 var myMap = L.map("map", {
   center: [37.7749, -122.4194],
-  zoom: 5
+  zoom: 3
 });
 
 // Adding streetmap tile layer
@@ -11,6 +11,36 @@ streetmap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}
     maxZoom: 18,
     zoomOffset: -1,
     id: "mapbox/streets-v11",
+    accessToken: API_KEY
+}).addTo(myMap);
+
+// Adding dark tile layer
+light = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+    attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
+    tileSize: 512,
+    maxZoom: 18,
+    zoomOffset: -1,
+    id: "mapbox/light-v10",
+    accessToken: API_KEY
+}).addTo(myMap);
+
+// Adding dark tile layer
+dark = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+    attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
+    tileSize: 512,
+    maxZoom: 18,
+    zoomOffset: -1,
+    id: "mapbox/dark-v10",
+    accessToken: API_KEY
+}).addTo(myMap);
+
+// Adding outdoors tile layer
+outdoors = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+    attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
+    tileSize: 512,
+    maxZoom: 18,
+    zoomOffset: -1,
+    id: "mapbox/cjaudgl840gn32rnrepcb9b9g",
     accessToken: API_KEY
 }).addTo(myMap);
 
@@ -27,7 +57,10 @@ satellite = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}
 // Define a baseMaps object to hold our base layers
 var baseMaps = {
   "Street Map": streetmap,
-  "Satellite": satellite
+  Light: light,
+  Dark: dark,
+  Outdoors: outdoors,
+  Satellite: satellite
 };
 
 // Define colors for scale
