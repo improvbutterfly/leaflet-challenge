@@ -7,6 +7,8 @@ For this project, I was asked to use data from [USGS](https://earthquake.usgs.go
 
 From the selected dataset and map, I was required to plot the size of the marker based on the magnitude, and create a color code based on the depth of the earthquake.
 
+[See it in action!](https://improvbutterfly.github.io/leaflet-challenge/Leaflet-Step-1/)
+
 ### Example screenshots
 
 ![World Map](images/WorldMap.png)
