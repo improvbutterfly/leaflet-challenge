@@ -27,23 +27,41 @@ function onEachFeature(feature, layer) {
 // Define a markerSize function that will give each city a different radius based on its population
 function markerOptions(feature, latlng) {
   var magnitude = feature.properties.mag;
+  var depth = feature.geometry.coordinates[2];
+  //console.log(depth);
+
+  // Fill color depending on depth
+  var fillColor;
+  if (depth < 10){
+    fillColor = "#8AF475";
+  }
+  else if (depth < 30) {
+    fillColor = "#92CC62";
+  }
+  else if (depth < 50) {
+    fillColor = "#9AA350";
+  }
+  else if (depth < 70) {
+    fillColor = "#A37B3D";
+  }
+  else if (depth < 90) {
+    fillColor = "#AB522B";
+  }
+  else {
+    fillColor = "#B32A18";
+  }
+
   var markerSize = magnitude * 5;
-  var geojsonMarkerOptions = {fillOpacity: 0.75,
-    color: "white",
-    fillColor: "purple",
-    radius: markerSize }
+  var geojsonMarkerOptions = {
+    fillOpacity: 0.75,
+    color: "black",
+    fillColor: fillColor,
+    weight: 1,
+    radius: markerSize 
+  }
   return L.circleMarker(latlng, geojsonMarkerOptions);
 }
 
-/*circle(feature.geometery.coordinates, {
-    fillOpacity: 0.75,
-    color: "white",
-    fillColor: "purple",
-    // Setting our circle's radius equal to the output of our markerSize function
-    // This will make our marker's size proportionate to its population
-    radius: markerSize(feature.properties.mag)
-  }).
-*/
 // Store our API endpoint inside queryUrl
 var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 
@@ -51,6 +69,7 @@ var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_we
 d3.json(queryUrl, function(data) {
   // Once we get a response, send the data.features object to the createFeatures function
   console.log(data.features);
+  console.log(data.features[0].geometry);
   earthquakes = L.geoJson(data.features, {
     pointToLayer: markerOptions,
     onEachFeature: onEachFeature
@@ -68,5 +87,35 @@ d3.json(queryUrl, function(data) {
   L.control.layers(baseMaps, overlayMaps, {
     collapsed: false
   }).addTo(myMap);
+
+  // Set up the legend
+  var legend = L.control({ position: "bottomleft" });
+  legend.onAdd = function() {
+    var div = L.DomUtil.create("div", "legend");
+    var limits = ["<10", "10-30", "30-50", "50-70", "70-90", "90+"];
+    var colors = ["#8AF475", "#92CC62", "#9AA350", "#A37B3D", "#AB522B", "#B32A18"];
+    var labels = [];
+
+    // Add min & max
+    var legendInfo = "<h1>Depth (km)</h1>" +
+      "<div class=\"labels\">" +
+        "<div class=\"min\">" + limits[0] + "</div>" +
+        "<div class=\"max\">" + limits[limits.length - 1] + "</div>" +
+      "</div>";
+
+    div.innerHTML = legendInfo;
+
+    limits.forEach(function(limit, index) {
+      labels.push("<li style=\"background-color: " + colors[index] + "\"></li>");
+    });
+
+    div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+    console.log(div);
+    return div;
+  };
+
+  // Adding legend to the map
+  legend.addTo(myMap);
+
 
 });
